@@ -31,8 +31,91 @@ var assert = require("assert")
 // Explanation: Empty array...
 
 const altNumbers = (numArray) => {
-    // TODO: COMPLETE THIS FUNCTION
-    return [];
+    // edge case:
+    // if it is an empty array
+    if (numArray.length == 0)
+    {
+        return [];
+    }
+
+    let startindex = -1;
+    let numpos = 0, numneg = 0; 
+
+    // count the number of positive num and negative num
+    for (let j = 0; j < numArray.length; j++) {
+        if (numArray[j] < 0){
+            numneg++; 
+        } 
+        else{
+            numpos++;
+        }
+    }
+
+    // rearrange the array
+    arrangedArray = []
+
+    // if more positive numbers,
+    // rearrange all the positive numbers 
+    // with same order at the front of array
+    // all negative numbers with same order at the back
+    if ((numpos - numneg) > 0) {
+        for (let k = 0; k < numArray.length; k++) 
+        {
+            if (numArray[k] >= 0) {
+                arrangedArray.push(numArray[k])
+            }
+        }
+
+        // start index of negative numbers
+        startindex = arrangedArray.length
+        for (let k = 0; k < numArray.length; k++)
+        {
+            if (numArray[k] < 0) {
+                arrangedArray.push(numArray[k])
+            }
+        }
+    } else {
+        // else, if more negative numbers,
+        // all negative numbers are put 
+        // at the front
+        for (let k = 0; k < numArray.length; k++) 
+        {
+            if (numArray[k] < 0) {
+                arrangedArray.push(numArray[k])
+            }
+        }
+
+        // start index of positive numbers
+        startindex = arrangedArray.length
+        for (let k = 0; k < numArray.length; k++)
+        {
+            if (numArray[k] >= 0) {
+                arrangedArray.push(numArray[k])
+            }
+        }
+    }
+    
+    let newArray = [arrangedArray[0]];
+    if ((numneg - numpos) >= 0) {
+        let pos = startindex; neg = 1
+        while (pos < arrangedArray.length && neg < pos && arrangedArray[neg] < 0)
+        {
+            newArray.push(arrangedArray[pos], arrangedArray[neg]);
+            pos += 1; neg += 1;
+        }
+        if ((numneg - numpos) == 0) {
+            newArray.push(arrangedArray[pos]);
+        }
+    } else {
+        let neg = startindex; pos = 1
+        while (neg < arrangedArray.length && pos < neg && arrangedArray[pos] >= 0)
+        {
+            
+            newArray.push(arrangedArray[neg], arrangedArray[pos]);
+            pos += 1; neg += 1;
+        }   
+    }
+    return newArray;
 }
 
 module.exports = { altNumbers } // Do not modify this line
@@ -43,12 +126,14 @@ module.exports = { altNumbers } // Do not modify this line
 // If successful, no output should appear. If unsuccessful, you should see 
 // assertion errors being thrown.
 
+
 let array1 = [1, -3, -8, -5, 10]
 array1 = altNumbers(array1)
 const answer1 = [-3, 1, -8, 10, -5]
 for (let i = 0; i < array1.length; i++) {
     assert(array1[i] === answer1[i])
 }
+
 
 let array2 = [3, 0, 0, -5, -2]
 array2 = altNumbers(array2)
